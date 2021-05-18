@@ -15,4 +15,18 @@ class CsrfHandler {
             $session->set('_tokens', $tokens);
         }
     }
+
+    public static function validToken(string $token) {
+        $container = Container::getInstance();
+        $session = $container->get('session');
+        $tokens = $session->get('_tokens');
+        if (!$tokens)
+            return false;
+        $id = array_search($token, $tokens);
+        if ($id == -1)
+            return false;
+        unset($tokens[$id]);
+        $session->set('_tokens', $tokens);
+        return true;
+    }
 }
