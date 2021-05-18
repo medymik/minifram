@@ -7,6 +7,7 @@ class Request {
         private $uri;
         private $uri_args;
         private $params;
+        private $body;
 
         public function routeMatch(array $args) : bool {
                 if (count($args) != count($this->uri_args))
@@ -33,6 +34,8 @@ class Request {
         public function __construct(array $server_request)
         {
                 $this->method = $server_request['REQUEST_METHOD'];
+                if ($this->method == 'POST')
+                        $this->body = $_POST;
                 $this->uri = $server_request['REQUEST_URI'];
                 // avoid the query params
                 $pos = strrpos($this->uri, "?");
